@@ -1,0 +1,21 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class Role extends Model
+{
+    use HasFactory;
+
+    protected $table = 'role';
+
+    protected $primaryKey = 'PK_role_ID';
+
+    protected $fillable = [
+        'name'
+    ];
+
+    protected $timestamp = TRUE;
+}
