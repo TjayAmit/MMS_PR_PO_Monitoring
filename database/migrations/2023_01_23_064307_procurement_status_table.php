@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('procurement_status',function(Blueprint $table){
             $table -> increments('PK_procurement_ID');
             $table -> string('procurement_description');
-            $table -> timestamp();
+            $table -> timestamps();
         });
     }
 

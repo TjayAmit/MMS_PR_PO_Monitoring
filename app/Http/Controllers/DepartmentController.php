@@ -10,24 +10,47 @@ use App\Models\Department;
 class DepartmentController extends Controller
 {
 
-    public function showBizzBox()
+    public function importDepartmentFromBizzBox()
     {
         try{
-            $data = DB::connection("sqlsrv")->SELECT("SELECT TOP 10 * from iwPritem");
+            //Fetch department list from bizzbox removing test data.
+            $data = DB::connection("sqlsrv")->SELECT("SELECT * from mscWarehouse WHERE description <> 'Not Applicable'");
 
             $result = array();
 
             foreach($data as $key => $val)
             {
-                array_push($result,[
-                    'PK_iwPritem' => $val -> PK_iwPritem,
-                    'unit' => $val -> unit
-                ]);
+                $department = new Department();
+                $department -> dept_PK_msc_warehouse = $val -> PK_mscWarehouse;
+                $department -> dept_name = $val -> description;
+                $department -> dept_shortname = $val -> shortname;
+                $department -> created_at = now();
+                $department -> updated_at = now();
+                $department -> save();
             }
 
             return response() -> json([
                 'status' => 200,
-                'data' => $result
+                'data' => "Successfully registered department from the bizzbox."
+            ]);
+
+        }catch(\Throwable $th){
+            return response() -> json([
+                'status' => 500,
+                'message' => $th -> getMessage()
+            ]);
+        }
+    }
+
+
+    public function publicSelection()
+    {
+        try{
+            $data = DB::SELECT("SELECT PK_department_ID AS id, dept_name AS name FROM department");
+
+            return response() -> json([
+                'status' => 200,
+                'data' => $data
             ]);
         }catch(\Throwable $th){
             return response() -> json([
@@ -79,7 +102,6 @@ class DepartmentController extends Controller
 
             $data -> dept_name = $request -> dept_name;
             $data -> dept_location = $request -> dept_location;
-            $data -> dept_head = $request -> dept_head;
             $data -> updated_at = now();
             $data -> save();
 

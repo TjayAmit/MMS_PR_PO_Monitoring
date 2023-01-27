@@ -15,9 +15,9 @@ return new class extends Migration
     {
         Schema::create('department', function (Blueprint $table) {
             $table->increments('PK_department_ID');
+            $table->integer('dept_PK_msc_warehouse');
             $table->string('dept_name');
-            $table->string('dept_location');
-            $table->string('dept_head');
+            $table->string('dept_shortname') -> nullable();
             $table->timestamps();
         });
     }

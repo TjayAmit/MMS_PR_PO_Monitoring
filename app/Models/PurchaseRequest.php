@@ -15,10 +15,9 @@ class PurchaseRequest extends Model
 
     protected $fillable = [
         'pr_Prxno',
-        'pr_no',
         'pr_department',
         'pr_remarks',
-        'pr_reg_date'
+        'pr_date'
     ];
 
     protected $timestamp = TRUE;

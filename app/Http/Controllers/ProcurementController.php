@@ -5,57 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-use Illuminate\Models\Procurement;
+use App\Models\Procurement;
 
 class ProcurementController extends Controller
 {
-
-    /**
-     * 
-     * Fetch pr that doesn't have PO
-        SELECT
-            prq.PK_TRXNO,
-            prq.PRNo,
-            prq.Department,
-            prq.remarks,
-            prq.PRDate,
-            pri.regdate
-        FROM iwPRitem AS pr left join iwPOitem AS po
-            ON pr.PK_iwPritem = po.FK_iwPRitem JOIN 
-            vwReportPurchaseRequest AS prq ON prq.PK_TRXNO = pr.FK_TRXNO JOIN
-            iwPRinv pri ON prq.PK_TRXNO = pri.PK_TRXNO;
-     * 
-     * Fetch with filtered pr
-        SELECT
-            prq.PK_TRXNO,
-            prq.PRNo,
-            prq.Department,
-            prq.remarks,
-            prq.PRDate,
-            pri.regdate
-        FROM iwPRitem AS pr left join iwPOitem AS po
-            ON pr.PK_iwPritem = po.FK_iwPRitem JOIN 
-            vwReportPurchaseRequest AS prq ON prq.PK_TRXNO = pr.FK_TRXNO JOIN
-            iwPRinv pri ON prq.PK_TRXNO = pri.PK_TRXNO
-            GROUP BY prq.PK_TRXNO
-            HAVING prq.PK_TRXNO = 23671235 AND po.FK_TRXNO is null;
-
-            
-        SELECT
-            prq.PK_TRXNO,
-            prq.PRNo,
-            prq.Department,
-            prq.remarks,
-            prq.PRDate,
-            pri.regdate
-        FROM iwPRitem AS pr left join iwPOitem AS po
-            ON pr.PK_iwPritem = po.FK_iwPRitem JOIN 
-            vwReportPurchaseRequest AS prq ON prq.PK_TRXNO = pr.FK_TRXNO JOIN
-            iwPRinv pri ON prq.PK_TRXNO = pri.PK_TRXNO 
-			WHERE po.FK_TRXNO is null;
-     */
-
-
 
     public function index()
     {
@@ -78,10 +31,10 @@ class ProcurementController extends Controller
     {
         try{
             $data = new Procurement;
-
-            $data -> procurement_desc = $request -> procurement_desc;
+            $data -> procurement_description = $request -> description;
             $data -> created_at = now();
             $data -> updated_at = now();
+            $data -> save();
 
             return response() -> json([
                 'status' => 200,

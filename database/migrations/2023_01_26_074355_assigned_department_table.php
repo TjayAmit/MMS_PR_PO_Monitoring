@@ -13,17 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('purchase_request', function(Blueprint $table){
-            $table -> increments('PK_pr_ID');
-            $table -> string('pr_Prxno');
-            $table -> longText('pr_remarks') -> nullable();
-            $table -> date('pr_date');
-            
+        Schema::create('assigned_department',function(Blueprint $table){
+            $table -> increments('PK_assigned_dept_ID');
+            $table -> unsignedBigInteger('FK_user_ID') ;
+            $table -> foreign('FK_user_ID') -> references("id") -> on('users');
             $table -> integer('FK_department_ID') -> unsigned() -> nullable();
             $table -> foreign('FK_department_ID') -> references('PK_department_ID') -> on('department') -> onUpdate('cascade');
-
-            $table -> integer('FK_procurement_ID') -> unsigned() -> nullable();
-            $table -> foreign('FK_procurement_ID') -> references('PK_procurement_ID') -> on('procurement_status') -> onUpdate('cascade');
             $table -> timestamps();
         });
     }
@@ -35,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropExist('purchase_request');
+        Schema::dropExist('assigned_department');
     }
 };
