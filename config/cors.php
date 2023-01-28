@@ -24,7 +24,7 @@ return [
 
     'allowed_origins' => ['http://localhost:3000',"htt://192.168.13.232:3000",'*'],
 
-    'allowed_origins_patterns' => [],
+    'allowed_origins_patterns' => [], 
 
     'allowed_headers' => ["Accept, Authorization, Content-Type",'*'],
 
@@ -32,6 +32,6 @@ return [
 
     'max_age' => 0,
 
-    'supports_credentials' => false,
+    'supports_credentials' => true,
 
 ];

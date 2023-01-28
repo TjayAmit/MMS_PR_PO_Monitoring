@@ -18,34 +18,53 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
-Route::namespace('App\Http\Controllers')->group(function(){
-    // Department Module
-    Route::get('department', "DepartmentController@index");
+// Auth
+Route::namespace('App\Http\Controllers')->group(function () {
+    Route::post('signin', 'UserController@signIn');   //Login
+    Route::post('signup', 'UserController@signUp');   //Signup
+    Route::post('account', 'UserController@signUpAccount');   //Signup
+});
+
+Route::namespace('App\Http\Controllers') -> group(function(){
     Route::get('department/public', "DepartmentController@publicSelection");
-    Route::post('department/bb', "DepartmentController@importDepartmentFromBizzBox");
-    Route::get('department/{id}', "DepartmentController@show");
-    Route::put('department', "DepartmentController@update");
-    Route::delete('department', "DepartmentController@destroy");
+});
 
-    // Role Module
-    Route::get('role', "RoleController@index");
-    Route::post('role', "RoleController@store");
-    Route::get('role/{id}', "RoleController@show");
-    Route::put('role', "RoleController@update");
-    Route::delete('role', "RoleController@destroy");
-
-    // Procurement Module
-    Route::get('procurement', "ProcurementController@index");
-    Route::post('procurement', "ProcurementController@store");
-    Route::get('procurement/{id}', "ProcurementController@show");
-    Route::put('procurement', "ProcurementController@update");
-    Route::delete('procurement', "ProcurementController@destroy");
-
-    // Procurement Module
-    Route::post('purchaserequest/bb', "PurchaseRequestController@importPurchaseRequestFromBizzBox");
-    Route::get('purchaserequest', "PurchaseRequestController@index");
-    Route::post('purchaserequest', "PurchaseRequestController@store");
-    Route::get('purchaserequest/{id}', "PurchaseRequestController@show");
-    Route::put('purchaserequest', "PurchaseRequestController@update");
-    Route::delete('purchaserequest', "PurchaseRequestController@destroy");
+Route::group(['middleware' => 'auth:sanctum'], function(){
+    Route::namespace('App\Http\Controllers')->group(function(){
+        
+        // Department Module
+        Route::get('department', "DepartmentController@index");
+        Route::post('department/bb', "DepartmentController@importDepartmentFromBizzBox");
+        Route::get('department/{id}', "DepartmentController@show");
+        Route::put('department', "DepartmentController@update");
+        Route::delete('department', "DepartmentController@destroy");
+    
+        // Role Module
+        Route::get('role', "RoleController@index");
+        Route::post('role', "RoleController@store");
+        Route::get('role/{id}', "RoleController@show");
+        Route::put('role', "RoleController@update");
+        Route::delete('role', "RoleController@destroy");
+    
+        // Procurement Module
+        Route::get('procurement', "ProcurementController@index");
+        Route::post('procurement', "ProcurementController@store");
+        Route::get('procurement/{id}', "ProcurementController@show");
+        Route::put('procurement', "ProcurementController@update");
+        Route::delete('procurement', "ProcurementController@destroy");
+    
+        // Procurement Module
+        Route::post('purchaserequest/bb', "PurchaseRequestController@importPurchaseRequestFromBizzBox");
+        Route::get('purchaserequest', "PurchaseRequestController@index");
+        Route::post('purchaserequest', "PurchaseRequestController@store");
+        Route::get('purchaserequest/{id}', "PurchaseRequestController@show");
+        Route::put('purchaserequest', "PurchaseRequestController@update");
+        Route::delete('purchaserequest', "PurchaseRequestController@destroy");
+    
+        //User
+        Route::put('user', "UserController@update");
+        Route::put('user/reset', "UserController@changePassword");
+        Route::put('user/Account', "UserController@updateAccount");
+        Route::delete('user', "UserController@destroy");
+    });
 });
