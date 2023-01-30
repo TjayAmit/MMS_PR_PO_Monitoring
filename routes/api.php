@@ -23,6 +23,7 @@ Route::namespace('App\Http\Controllers')->group(function () {
     Route::post('signin', 'UserController@signIn');   //Login
     Route::post('signup', 'UserController@signUp');   //Signup
     Route::post('account', 'UserController@signUpAccount');   //Signup
+    Route::get('user/init',"UserController@ifHasTokenValidation");
 });
 
 Route::namespace('App\Http\Controllers') -> group(function(){
@@ -62,6 +63,7 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
         Route::delete('purchaserequest', "PurchaseRequestController@destroy");
     
         //User
+        Route::get('user',"UserController@index");
         Route::put('user', "UserController@update");
         Route::put('user/reset', "UserController@changePassword");
         Route::put('user/Account', "UserController@updateAccount");

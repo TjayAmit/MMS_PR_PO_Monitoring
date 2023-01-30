@@ -13,6 +13,56 @@ use App\Models\Profile;
 
 class UserController extends Controller
 {
+
+    public function index()
+    {
+        try{
+
+            $data = DB::SELECT("SELECT  u.id, p.first_name,p.middle_name,p.last_name,d.dept_name as department, 
+                CASE WHEN u.status == 0 THEN 'PENDING' ELSE 'APPROVED' END as status 
+                FROM users u JOIN profile p ON p.FK_user_ID = u.id 
+                JOIN department d ON d.PK_department_ID = p.FK_department_ID");
+
+            return response() -> json([
+                'status' => 200,
+                'data' => $data
+            ]);
+        }catch(\Throwable $th){
+            return response() -> json([
+                'status' => 500,
+                'message' => $th -> getMessage()
+            ]);
+        }
+    }
+
+    public function ifHasTokenValidation(Request $request)
+    {
+        try{;
+            $user = $request -> user();
+            
+            $account = DB::SELECT('SELECT p.PK_profile_ID,p.first_name,p.middle_name, r.name as role,
+                p.last_name,d.dept_name as department,p.FK_role_ID as FROM profile p 
+                JOIN department d ON d.PK_department_ID = p.FK_department_ID 
+                JOIN role r ON r.PK_role_ID = p.FK_role_ID
+                WHERE p.FK_user_ID = ?',[$user -> id]); 
+            
+            $response -> name = $account[0] -> first_name.' '.$account[0] -> last_name;
+            $response -> department = $account[0] -> department;
+            $response -> role = $account[0] -> role;
+
+            return response() -> json([
+                'status' => 200,
+                'data' => $response
+            ]);
+
+        }catch(\Throwable $th){
+            return response() -> json([
+                'status' => 500,
+                'message' => $th -> getMessage()
+            ]);
+        }
+    }
+
     public function signIn(Request $request)
     {
         try{
@@ -37,8 +87,9 @@ class UserController extends Controller
 
             if(Auth::attempt(['email' => $data[0] -> email,'password' => $request -> password]))
             {
-                $account = DB::SELECT('SELECT p.PK_profile_ID,p.first_name,p.middle_name,p.last_name,d.dept_name,p.FK_role_ID FROM profile p 
+                $account = DB::SELECT('SELECT p.PK_profile_ID,p.first_name,p.middle_name,p.last_name ,d.dept_name as department,p.FK_role_ID,r.name as role FROM profile p 
                     JOIN department d ON d.PK_department_ID = p.FK_department_ID 
+                    JOIN role r ON r.PK_role_ID = p.FK_role_ID 
                     WHERE p.FK_user_ID = ?',[$data[0] -> id]); 
 
                 if(!$account)
@@ -46,22 +97,20 @@ class UserController extends Controller
                     return response() -> json([
                         'status' => 404,
                         'path' => "/account"
-                    ]) -> withCookie(cookie('identity',$data[0] -> id, 30));
+                    ]) -> withCookie(cookie('i?',$data[0] -> id, 60));
                 }
 
-                $name = $account[0] -> first_name.' '.$account[0] -> last_name; 
-                $department = $account[0] -> dept_name;
-                $role = $account[0] -> FK_role_ID;
+                $name = $account[0] -> first_name.' '.$account[0] -> last_name;
 
                 $user = Auth::user();
-                $token = $user -> createToken($account -> PK_profile_ID);
-                $response -> name = $name;
-                $response -> department = $department;
-                $response -> role = $role;
+                $token = $user -> createToken($user -> email);
+                $data['name'] = $name;
+                $data['department'] = $account[0] -> department;
+                $data['role'] = $account[0] -> role;
                 
                 return response() -> json([
                     "status" => 200,
-                    "data" => $response
+                    "data" => $data
                 ]) -> withCookie(cookie('token',$token -> plainTextToken,120));
             }
             
@@ -109,7 +158,7 @@ class UserController extends Controller
     public function signUpAccount(Request $request)
     {
         try{
-            $hasCookie = $request -> hasCookie('identity');
+            $hasCookie = $request -> hasCookie('i?');
 
             if(!$hasCookie)
             {   
@@ -132,24 +181,20 @@ class UserController extends Controller
             $profile -> updated_at = now();
             $profile -> save();
 
-            $user = DB::SELECT("SELECT p.PK_profile_ID,u.status,u.email,u.password,d.dept_name,r.name FROM users u JOIN profile p ON p.FK_user_ID = u.id
+            $userInformation = DB::SELECT("SELECT p.PK_profile_ID,u.status,u.email,u.password,d.dept_name as department,r.name as role FROM users u JOIN profile p ON p.FK_user_ID = u.id
                 JOIN department d ON d.PK_department_ID = p.FK_department_ID 
-                JOIN role r ON r.PK_role_ID = p.FK_role_ID WHERE u.id = ?",[$userID]);
+                JOIN role r ON r.PK_role_ID = p.FK_role_ID WHERE u.id = ?",[$userID]);       
 
-            if($user[0] -> status === 1)
+            if($userInformation[0] -> status === 1)
             {
-                if(Auth::attempt(['email' => $user[0] -> email,'password' => $request -> password]))
+                if(Auth::attempt(['email' => $userInformation[0] -> email,'password' => $request -> password]))
                 {
-
-                    $name = $request -> firstname.' '.$request -> lastname; 
-                    $role = $user[0] -> name;
-
                     $user = Auth::user();
-                    $token = $user -> createToken($user -> PK_profile_ID);
+                    $token = $user -> createToken($user -> email);
 
-                    $response -> name = $name;
-                    $response -> department = $user[0] -> dept_name;
-                    $response -> role = $role;
+                    $response['name'] = $profile -> first_name.' '.$profile -> last_name;
+                    $response['department']  = $userInformation[0] -> department;
+                    $response['role'] = $userInformation[0] -> role;
                     
                     return response() -> json([
                         "status" => 200,
@@ -160,7 +205,7 @@ class UserController extends Controller
 
             return response() -> json([
                 'status' => 200,
-                'data' => "Please wait for approval."
+                'message' => "Please wait for approval."
             ]);
         }catch(\Throwable $th){
             return response() ->json([
