@@ -9,7 +9,7 @@ class Procurement extends Model
 {
     use HasFactory;
 
-    protected $table = 'procurement_status';
+    protected $table = 'procurement_record';
 
     protected $primaryKey = 'PK_procurement_ID';
 

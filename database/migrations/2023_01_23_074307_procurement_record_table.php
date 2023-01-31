@@ -13,9 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('procurement_status',function(Blueprint $table){
+        Schema::create('procurement_record',function(Blueprint $table){
             $table -> increments('PK_procurement_ID');
             $table -> string('procurement_description');
+            
+            $table -> integer('FK_pr_ID') -> unsigned() -> nullable();
+            $table -> foreign('FK_pr_ID') -> references('PK_pr_ID') -> on('purchase_request') -> onUpdate('cascade');
             $table -> timestamps();
         });
     }
@@ -27,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropExist('procurement_status');
+        Schema::dropExist('procurement_record');
     }
 };

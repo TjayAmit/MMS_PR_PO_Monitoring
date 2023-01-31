@@ -15,7 +15,7 @@ class PurchaseRequestController extends Controller
     {
         try{
 
-            PurchaseRequest::truncate();
+            // PurchaseRequest::truncate();
 
             //Fetch purchase list from bizzbox removing test data.
             $data = DB::connection("sqlsrv")->SELECT("SELECT c.qty * ISNULL(d.lastpurcprice, 0) AS Price, a.PK_TRXNO,
@@ -68,7 +68,7 @@ class PurchaseRequestController extends Controller
             // FETCH LIST OF PURCHASE REQUEST IN PR PO DATABASE
             $data = DB::SELECT('SELECT pr.PK_pr_ID,pr.pr_Prxno,d.dept_name,ps.procurement_description,pr.pr_date,pr.updated_at  FROM purchase_request AS pr 
             JOIN department d ON pr.FK_department_ID = d.PK_department_ID 
-            JOIN procurement_status ps ON pr.FK_procurement_ID = ps.PK_procurement_ID');
+            JOIN procurement_record ps ON ps.FK_pr_ID = pr.PK_pr_ID');
 
             return response() -> json([
                 'status' => 200,

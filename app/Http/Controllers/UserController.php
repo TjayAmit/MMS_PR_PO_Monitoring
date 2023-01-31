@@ -14,10 +14,10 @@ use App\Models\Profile;
 class UserController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
         try{
-
+            return $request -> user();
             $data = DB::SELECT("SELECT  u.id, p.first_name,p.middle_name,p.last_name,d.dept_name as department, 
                 CASE WHEN u.status == 0 THEN 'PENDING' ELSE 'APPROVED' END as status 
                 FROM users u JOIN profile p ON p.FK_user_ID = u.id 
@@ -37,7 +37,7 @@ class UserController extends Controller
 
     public function ifHasTokenValidation(Request $request)
     {
-        try{;
+        try{
             $user = $request -> user();
             
             $account = DB::SELECT('SELECT p.PK_profile_ID,p.first_name,p.middle_name, r.name as role,
@@ -54,7 +54,6 @@ class UserController extends Controller
                 'status' => 200,
                 'data' => $response
             ]);
-
         }catch(\Throwable $th){
             return response() -> json([
                 'status' => 500,
@@ -101,17 +100,16 @@ class UserController extends Controller
                 }
 
                 $name = $account[0] -> first_name.' '.$account[0] -> last_name;
-
                 $user = Auth::user();
-                $token = $user -> createToken($user -> email);
-                $data['name'] = $name;
-                $data['department'] = $account[0] -> department;
-                $data['role'] = $account[0] -> role;
+                $token = $user -> createToken($request -> ip());
+                $res['name'] = $name;
+                $res['department'] = $account[0] -> department;
+                $res['role'] = $account[0] -> role;
                 
                 return response() -> json([
                     "status" => 200,
-                    "data" => $data
-                ]) -> withCookie(cookie('token',$token -> plainTextToken,120));
+                    "data" => $res
+                ]) -> withCookie(cookie('Token',$token -> plainTextToken,120));
             }
             
             return response() -> json([
@@ -190,7 +188,7 @@ class UserController extends Controller
                 if(Auth::attempt(['email' => $userInformation[0] -> email,'password' => $request -> password]))
                 {
                     $user = Auth::user();
-                    $token = $user -> createToken($user -> email);
+                    $token = $user -> createToken($request -> ip());
 
                     $response['name'] = $profile -> first_name.' '.$profile -> last_name;
                     $response['department']  = $userInformation[0] -> department;
@@ -199,7 +197,7 @@ class UserController extends Controller
                     return response() -> json([
                         "status" => 200,
                         "data" => $response
-                    ]) -> withCookie(cookie('token',$token -> plainTextToken,120));
+                    ]) -> withCookie(cookie('Token',$token -> plainTextToken,120));
                 }
             }
 

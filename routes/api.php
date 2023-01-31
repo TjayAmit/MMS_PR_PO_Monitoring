@@ -30,15 +30,15 @@ Route::namespace('App\Http\Controllers') -> group(function(){
     Route::get('department/public', "DepartmentController@publicSelection");
 });
 
-Route::group(['middleware' => 'auth:sanctum'], function(){
+// Route::group(['middleware' => 'auth:sanctum'], function(){
     Route::namespace('App\Http\Controllers')->group(function(){
         
         // Department Module
         Route::get('department', "DepartmentController@index");
-        Route::post('department/bb', "DepartmentController@importDepartmentFromBizzBox");
         Route::get('department/{id}', "DepartmentController@show");
         Route::put('department', "DepartmentController@update");
         Route::delete('department', "DepartmentController@destroy");
+        Route::post('department/bb', "DepartmentController@importDepartmentFromBizzBox");
     
         // Role Module
         Route::get('role', "RoleController@index");
@@ -68,5 +68,5 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
         Route::put('user/reset', "UserController@changePassword");
         Route::put('user/Account', "UserController@updateAccount");
         Route::delete('user', "UserController@destroy");
-    });
+    // });
 });

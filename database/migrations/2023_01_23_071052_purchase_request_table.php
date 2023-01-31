@@ -21,9 +21,6 @@ return new class extends Migration
             
             $table -> integer('FK_department_ID') -> unsigned() -> nullable();
             $table -> foreign('FK_department_ID') -> references('PK_department_ID') -> on('department') -> onUpdate('cascade');
-
-            $table -> integer('FK_procurement_ID') -> unsigned() -> nullable();
-            $table -> foreign('FK_procurement_ID') -> references('PK_procurement_ID') -> on('procurement_status') -> onUpdate('cascade');
             $table -> timestamps();
         });
     }
