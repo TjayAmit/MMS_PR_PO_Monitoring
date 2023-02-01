@@ -17,9 +17,8 @@ class UserController extends Controller
     public function index(Request $request)
     {
         try{
-            return $request -> user();
             $data = DB::SELECT("SELECT  u.id, p.first_name,p.middle_name,p.last_name,d.dept_name as department, 
-                CASE WHEN u.status == 0 THEN 'PENDING' ELSE 'APPROVED' END as status 
+                CASE WHEN u.status = 0 THEN 'PENDING' ELSE 'APPROVED' END as status 
                 FROM users u JOIN profile p ON p.FK_user_ID = u.id 
                 JOIN department d ON d.PK_department_ID = p.FK_department_ID");
 

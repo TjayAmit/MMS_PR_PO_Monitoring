@@ -23,7 +23,7 @@ class DepartmentController extends Controller
                 $department = new Department();
                 $department -> dept_PK_msc_warehouse = $val -> PK_mscWarehouse;
                 $department -> dept_name = $val -> description;
-                $department -> dept_shortname = $val -> shortname;
+                $department -> dept_shortname = $val -> shortname  == NULL ? "NONE" : $val -> shortname;
                 $department -> created_at = now();
                 $department -> updated_at = now();
                 $department -> save();
@@ -63,13 +63,14 @@ class DepartmentController extends Controller
     public function index()
     {
         try{
-           $data = DB::SELECT("SELECT * FROM department");
+           $data = DB::SELECT("SELECT d.PK_department_ID, d.dept_PK_msc_warehouse, d.dept_name,
+           (SELECT count(p.PK_pr_ID) FROM purchase_request p WHERE p.FK_department_ID = d.PK_department_ID) as total_pr, 
+           d.dept_shortname, d.created_at FROM department d");
 
             return response() -> json([
                 'status' => 200,
                 'data' => $data
             ]);
-
         }catch(\Throwable $th){
             return response() -> json([
                 'status' => 500,

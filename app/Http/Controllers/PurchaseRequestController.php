@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-ini_set('max_execution_time', '120');
+ini_set('max_execution_time', '300');
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 use App\Models\PurchaseRequest;
+use App\Models\Procurement;
 
 class PurchaseRequestController extends Controller
 {
@@ -14,8 +15,6 @@ class PurchaseRequestController extends Controller
     public function importPurchaseRequestFromBizzBox()
     {
         try{
-
-            // PurchaseRequest::truncate();
 
             //Fetch purchase list from bizzbox removing test data.
             $data = DB::connection("sqlsrv")->SELECT("SELECT c.qty * ISNULL(d.lastpurcprice, 0) AS Price, a.PK_TRXNO,
@@ -31,8 +30,21 @@ class PurchaseRequestController extends Controller
 
             foreach($data as $key => $val)
             {
-                if($bizzbox_primaryKey == $val -> PK_TRXNO)
+                
+                $pr = DB::SELECT('SELECT * FROM purchase_request WHERE pr_Prxno = ?', [$val -> PK_TRXNO]);
+
+                if($pr)
                 {
+                    continue;
+                }
+
+                if(($val -> remarks === "test" OR 
+                        $val -> remarks === "TESTING" OR 
+                            $val -> remarks === "WRONG ENTRY" OR 
+                                $val -> remarks === "test" OR 
+                                    $val -> remarks === "sample entry only") 
+                        && $bizzbox_primaryKey === $val -> PK_TRXNO
+                    ){
                     continue;
                 }
 
@@ -43,11 +55,18 @@ class PurchaseRequestController extends Controller
                 $purchaseRequest = new PurchaseRequest();
                 $purchaseRequest -> pr_Prxno = $val -> PK_TRXNO;
                 $purchaseRequest -> FK_department_ID = $department[0] -> PK_department_ID;
-                $purchaseRequest -> pr_remarks = $val -> remarks;
+                $purchaseRequest -> pr_remarks = $val -> remarks ===  NULL? "NO REMARKS" : $val -> remarks ;
                 $purchaseRequest -> pr_date = $val -> PRDate;
                 $purchaseRequest -> created_at = now();
                 $purchaseRequest -> updated_at = now();
                 $purchaseRequest -> save();
+
+                $procurement = new Procurement();
+                $procurement -> procurement_description = "Pending";
+                $procurement -> FK_pr_ID = $purchaseRequest -> PK_pr_ID;
+                $procurement -> created_at = now();
+                $procurement -> updated_at = now();
+                $procurement -> save();
             }
 
             return response() -> json([

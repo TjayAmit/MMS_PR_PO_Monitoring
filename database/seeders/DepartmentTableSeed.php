@@ -41,7 +41,7 @@ class DepartmentTableSeed extends Seeder
         Department::create([
             'dept_PK_msc_warehouse' => 1003,
             'dept_name' => 'Admitting',
-            'dept_shortname' => NULL,
+            'dept_shortname' => "NONE",
         ]);
         
         Department::create([
@@ -437,13 +437,13 @@ class DepartmentTableSeed extends Seeder
         Department::create([
             'dept_PK_msc_warehouse' => 1069,
             'dept_name' => 'ENT',
-            'dept_shortname' => NULL,
+            'dept_shortname' => "NONE",
         ]);
         
         Department::create([
             'dept_PK_msc_warehouse' => 1070,
             'dept_name' => 'Temp Station',
-            'dept_shortname' => NULL,
+            'dept_shortname' => "NONE",
         ]);
         
         Department::create([
@@ -467,7 +467,7 @@ class DepartmentTableSeed extends Seeder
         Department::create([
             'dept_PK_msc_warehouse' => 1074,
             'dept_name' => 'Internal Medicine Follow-up Clinic',
-            'dept_shortname' => NULL,
+            'dept_shortname' => "NONE",
         ]);
         
         Department::create([
@@ -497,13 +497,13 @@ class DepartmentTableSeed extends Seeder
         Department::create([
             'dept_PK_msc_warehouse' => 1079,
             'dept_name' => 'Warehouse MEDICINES',
-            'dept_shortname' => NULL,
+            'dept_shortname' => "NONE",
         ]);
         
         Department::create([
             'dept_PK_msc_warehouse' => 1080,
             'dept_name' => 'Legal office',
-            'dept_shortname' => NULL,
+            'dept_shortname' => "NONE",
         ]);
         
         Department::create([
@@ -515,13 +515,13 @@ class DepartmentTableSeed extends Seeder
         Department::create([
             'dept_PK_msc_warehouse' => 1082,
             'dept_name' => 'Internal Control Unit',
-            'dept_shortname' => NULL,
+            'dept_shortname' => "NONE",
         ]);
         
         Department::create([
             'dept_PK_msc_warehouse' => 1083,
             'dept_name' => 'Security',
-            'dept_shortname' => NULL,
+            'dept_shortname' => "NONE",
         ]);
         
         Department::create([
@@ -533,85 +533,85 @@ class DepartmentTableSeed extends Seeder
         Department::create([
             'dept_PK_msc_warehouse' => 1085,
             'dept_name' => 'Surgery Department',
-            'dept_shortname' => NULL,
+            'dept_shortname' => "NONE",
         ]);
         
         Department::create([
             'dept_PK_msc_warehouse' => 1086,
             'dept_name' => 'Internal Medicine Department',
-            'dept_shortname' => NULL,
+            'dept_shortname' => "NONE",
         ]);
         
         Department::create([
             'dept_PK_msc_warehouse' => 1087,
             'dept_name' => 'WCPU',
-            'dept_shortname' => NULL,
+            'dept_shortname' => "NONE",
         ]);
         
         Department::create([
             'dept_PK_msc_warehouse' => 1088,
             'dept_name' => 'TB-DOTS',
-            'dept_shortname' => NULL,
+            'dept_shortname' => "NONE",
         ]);
         
         Department::create([
             'dept_PK_msc_warehouse' => 1089,
             'dept_name' => 'Ophthalmology Department',
-            'dept_shortname' => NULL,
+            'dept_shortname' => "NONE",
         ]);
         
         Department::create([
             'dept_PK_msc_warehouse' => 1090,
             'dept_name' => 'OB-Gyne Operating Room',
-            'dept_shortname' => NULL,
+            'dept_shortname' => "NONE",
         ]);
         
         Department::create([
             'dept_PK_msc_warehouse' => 1091,
             'dept_name' => 'Injection Room',
-            'dept_shortname' => NULL,
+            'dept_shortname' => "NONE",
         ]);
         
         Department::create([
             'dept_PK_msc_warehouse' => 1092,
             'dept_name' => 'Ward 1',
-            'dept_shortname' => NULL,
+            'dept_shortname' => "NONE",
         ]);
         
         Department::create([
             'dept_PK_msc_warehouse' => 1093,
             'dept_name' => 'Ward 2',
-            'dept_shortname' => NULL,
+            'dept_shortname' => "NONE",
         ]);
         
         Department::create([
             'dept_PK_msc_warehouse' => 1094,
             'dept_name' => 'Ward 4',
-            'dept_shortname' => NULL,
+            'dept_shortname' => "NONE",
         ]);
         
         Department::create([
             'dept_PK_msc_warehouse' => 1095,
             'dept_name' => 'Ward 5',
-            'dept_shortname' => NULL,
+            'dept_shortname' => "NONE",
         ]);
         
         Department::create([
             'dept_PK_msc_warehouse' => 1096,
             'dept_name' => 'Communicable Ward (Ward 7)',
-            'dept_shortname' => NULL,
+            'dept_shortname' => "NONE",
         ]);
         
         Department::create([
             'dept_PK_msc_warehouse' => 1096,
             'dept_name' => 'Ward 8',
-            'dept_shortname' => NULL,
+            'dept_shortname' => "NONE",
         ]);
         
         Department::create([
             'dept_PK_msc_warehouse' => 1097,
             'dept_name' => 'Ward 9',
-            'dept_shortname' => NULL,
+            'dept_shortname' => "NONE",
         ]);
         
         Department::create([
@@ -623,7 +623,7 @@ class DepartmentTableSeed extends Seeder
         Department::create([
             'dept_PK_msc_warehouse' => 1100,
             'dept_name' => 'SICU',
-            'dept_shortname' => NULL,
+            'dept_shortname' => "NONE",
         ]);
         
         Department::create([
@@ -671,7 +671,7 @@ class DepartmentTableSeed extends Seeder
         Department::create([
             'dept_PK_msc_warehouse' => 1108,
             'dept_name' => 'Nuclear Medicine Department',
-            'dept_shortname' => NULL,
+            'dept_shortname' => "NONE",
         ]);
         
         Department::create([
@@ -683,7 +683,7 @@ class DepartmentTableSeed extends Seeder
         Department::create([
             'dept_PK_msc_warehouse' => 1110,
             'dept_name' => 'Finance Department',
-            'dept_shortname' => NULL,
+            'dept_shortname' => "NONE",
         ]);
         
         Department::create([
@@ -701,13 +701,13 @@ class DepartmentTableSeed extends Seeder
         Department::create([
             'dept_PK_msc_warehouse' => 1113,
             'dept_name' => 'OB-GYNE PACU',
-            'dept_shortname' => NULL,
+            'dept_shortname' => "NONE",
         ]);
         
         Department::create([
             'dept_PK_msc_warehouse' => 1114,
             'dept_name' => 'OPD Chief Office',
-            'dept_shortname' => NULL,
+            'dept_shortname' => "NONE",
         ]);
         
         Department::create([
@@ -731,7 +731,7 @@ class DepartmentTableSeed extends Seeder
         Department::create([
             'dept_PK_msc_warehouse' => 1118,
             'dept_name' => 'Nutrition and Dietetics Warehouse',
-            'dept_shortname' => NULL,
+            'dept_shortname' => "NONE",
         ]);
         
         Department::create([
@@ -743,13 +743,13 @@ class DepartmentTableSeed extends Seeder
         Department::create([
             'dept_PK_msc_warehouse' => 1120,
             'dept_name' => 'Peritonial Dialysis Unit',
-            'dept_shortname' => NULL,
+            'dept_shortname' => "NONE",
         ]);
         
         Department::create([
             'dept_PK_msc_warehouse' => 1121,
             'dept_name' => 'Endoscopy Unit',
-            'dept_shortname' => NULL,
+            'dept_shortname' => "NONE",
         ]);
         
         Department::create([
@@ -761,7 +761,7 @@ class DepartmentTableSeed extends Seeder
         Department::create([
             'dept_PK_msc_warehouse' => 1123,
             'dept_name' => 'Warehouse Medicines (ARMM)',
-            'dept_shortname' => NULL,
+            'dept_shortname' => "NONE",
         ]);
         
         Department::create([
@@ -773,25 +773,25 @@ class DepartmentTableSeed extends Seeder
         Department::create([
             'dept_PK_msc_warehouse' => 1125,
             'dept_name' => 'COVID OPD Building',
-            'dept_shortname' => NULL,
+            'dept_shortname' => "NONE",
         ]);
         
         Department::create([
             'dept_PK_msc_warehouse' => 1126,
             'dept_name' => 'COVID ER - ISO',
-            'dept_shortname' => NULL,
+            'dept_shortname' => "NONE",
         ]);
         
         Department::create([
             'dept_PK_msc_warehouse' => 1127,
             'dept_name' => 'COVID Surgery Building',
-            'dept_shortname' => NULL,
+            'dept_shortname' => "NONE",
         ]);
         
         Department::create([
             'dept_PK_msc_warehouse' => 1128,
             'dept_name' => 'COVID Pedia Building',
-            'dept_shortname' => NULL,
+            'dept_shortname' => "NONE",
         ]);
         
         Department::create([
@@ -803,7 +803,7 @@ class DepartmentTableSeed extends Seeder
         Department::create([
             'dept_PK_msc_warehouse' => 1130,
             'dept_name' => 'COVID Ward 9 Building',
-            'dept_shortname' => NULL,
+            'dept_shortname' => "NONE",
         ]);
         
         Department::create([
@@ -815,43 +815,43 @@ class DepartmentTableSeed extends Seeder
         Department::create([
             'dept_PK_msc_warehouse' => 1132,
             'dept_name' => 'COVID CIU-Stepdown Cabatangan',
-            'dept_shortname' => NULL,
+            'dept_shortname' => "NONE",
         ]);
         
         Department::create([
             'dept_PK_msc_warehouse' => 1133,
             'dept_name' => 'COVID Dialysis',
-            'dept_shortname' => NULL,
+            'dept_shortname' => "NONE",
         ]);
         
         Department::create([
             'dept_PK_msc_warehouse' => 1134,
             'dept_name' => 'WARD 1 HOLDING AREA',
-            'dept_shortname' => NULL,
+            'dept_shortname' => "NONE",
         ]);
         
         Department::create([
             'dept_PK_msc_warehouse' => 1135,
             'dept_name' => 'Ward 5 Infectious',
-            'dept_shortname' => NULL,
+            'dept_shortname' => "NONE",
         ]);
         
         Department::create([
             'dept_PK_msc_warehouse' => 1136,
             'dept_name' => 'Ward 4 Infectious',
-            'dept_shortname' => NULL,
+            'dept_shortname' => "NONE",
         ]);
         
         Department::create([
             'dept_PK_msc_warehouse' => 1137,
             'dept_name' => 'Ward 8 Infectious',
-            'dept_shortname' => NULL,
+            'dept_shortname' => "NONE",
         ]);
         
         Department::create([
             'dept_PK_msc_warehouse' => 1138,
             'dept_name' => 'Office for Institutional Strategy and Excellence',
-            'dept_shortname' => NULL,
+            'dept_shortname' => "NONE",
         ]);
         
         Department::create([
@@ -863,43 +863,43 @@ class DepartmentTableSeed extends Seeder
         Department::create([
             'dept_PK_msc_warehouse' => 1140,
             'dept_name' => 'Medical Oxygen Gas Plant',
-            'dept_shortname' => NULL,
+            'dept_shortname' => "NONE",
         ]);
         
         Department::create([
             'dept_PK_msc_warehouse' => 1140,
             'dept_name' => 'Medical Oxygen Gas Plant',
-            'dept_shortname' => NULL,
+            'dept_shortname' => "NONE",
         ]);
         
         Department::create([
             'dept_PK_msc_warehouse' => 1141,
             'dept_name' => 'COVID Triage',
-            'dept_shortname' => NULL,
+            'dept_shortname' => "NONE",
         ]);
         
         Department::create([
             'dept_PK_msc_warehouse' => 1142,
             'dept_name' => 'COVID Pre-Triage',
-            'dept_shortname' => NULL,
+            'dept_shortname' => "NONE",
         ]);
         
         Department::create([
             'dept_PK_msc_warehouse' => 1143,
             'dept_name' => 'WARD 2 Holding Area',
-            'dept_shortname' => NULL,
+            'dept_shortname' => "NONE",
         ]);
         
         Department::create([
             'dept_PK_msc_warehouse' => 1144,
             'dept_name' => 'IM Transition Area',
-            'dept_shortname' => NULL,
+            'dept_shortname' => "NONE",
         ]);
         
         Department::create([
             'dept_PK_msc_warehouse' => 1145,
             'dept_name' => 'PPE-RMT WAREHOUSE',
-            'dept_shortname' => NULL,
+            'dept_shortname' => "NONE",
         ]);
         
         Department::create([
@@ -917,31 +917,31 @@ class DepartmentTableSeed extends Seeder
         Department::create([
             'dept_PK_msc_warehouse' => 1148,
             'dept_name' => 'Cashier Collecting',
-            'dept_shortname' => NULL,
+            'dept_shortname' => "NONE",
         ]);
         
         Department::create([
             'dept_PK_msc_warehouse' => 1149,
             'dept_name' => 'DOH Warehouse',
-            'dept_shortname' => NULL,
+            'dept_shortname' => "NONE",
         ]);
         
         Department::create([
             'dept_PK_msc_warehouse' => 1150,
             'dept_name' => 'CSSD/MEDICINE DISPOSAL',
-            'dept_shortname' => NULL,
+            'dept_shortname' => "NONE",
         ]);
         
         Department::create([
             'dept_PK_msc_warehouse' => 1151,
             'dept_name' => 'Pediatrics Department',
-            'dept_shortname' => NULL,
+            'dept_shortname' => "NONE",
         ]);
         
         Department::create([
             'dept_PK_msc_warehouse' => 1152,
             'dept_name' => 'Gyne Oncology',
-            'dept_shortname' => NULL,
+            'dept_shortname' => "NONE",
         ]);
         
         Department::create([
@@ -953,43 +953,43 @@ class DepartmentTableSeed extends Seeder
         Department::create([
             'dept_PK_msc_warehouse' => 1154,
             'dept_name' => 'HOSPITAL PATIENT SAFETY COMMITTEE',
-            'dept_shortname' => NULL,
+            'dept_shortname' => "NONE",
         ]);
         
         Department::create([
             'dept_PK_msc_warehouse' => 1155,
             'dept_name' => 'EYE CENTER PACU',
-            'dept_shortname' => NULL,
+            'dept_shortname' => "NONE",
         ]);
         
         Department::create([
             'dept_PK_msc_warehouse' => 1156,
             'dept_name' => 'CLAIMS MEDICAL UNIT',
-            'dept_shortname' => NULL,
+            'dept_shortname' => "NONE",
         ]);
         
         Department::create([
             'dept_PK_msc_warehouse' => 1157,
             'dept_name' => 'RADIOLOGY DEPARMENT',
-            'dept_shortname' => NULL,
+            'dept_shortname' => "NONE",
         ]);
         
         Department::create([
             'dept_PK_msc_warehouse' => 1158,
             'dept_name' => 'ISOLATION BUILDING',
-            'dept_shortname' => NULL,
+            'dept_shortname' => "NONE",
         ]);
         
         Department::create([
             'dept_PK_msc_warehouse' => 1159,
             'dept_name' => 'Committee on ARTA',
-            'dept_shortname' => NULL,
+            'dept_shortname' => "NONE",
         ]);
         
         Department::create([
             'dept_PK_msc_warehouse' => 1160,
             'dept_name' => 'DONATIONS',
-            'dept_shortname' => NULL,
+            'dept_shortname' => "NONE",
         ]);
     }
 }
