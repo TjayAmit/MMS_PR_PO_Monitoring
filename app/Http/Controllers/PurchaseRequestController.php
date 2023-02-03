@@ -123,10 +123,17 @@ class PurchaseRequestController extends Controller
         }
     }
 
-    public function show(Request $request)
+    public function show($id)
     {
         try{
-            $data = DB::SELECT('SELECT * FROM purchase_request WHERE PK_pr_ID = ?',[$request -> PK_pr_ID]);
+            $data = DB::connection('sqlsrv')->SELECT('SELECT d.PK_iwItems as Item_ID,a.docdate AS PRDate, a.remarks, 
+                d.itemdesc,c.qty,c.unit,c.qty * ISNULL(d.lastpurcprice,0) AS Price
+                    FROM dbo.iwPRinv AS a INNER JOIN
+                    dbo.mscWarehouse AS b ON a.FK_mscWarehouseFROM = b.PK_mscWarehouse INNER JOIN
+                    dbo.iwPRitem AS c ON c.FK_TRXNO = a.PK_TRXNO INNER JOIN
+                    dbo.iwItems AS d ON c.FK_iwItems = d.PK_iwItems LEFT JOIN
+                    dbo.iwPOitem AS po ON po.FK_iwPRitem = c.PK_iwPritem WHERE po.FK_TRXNO is null 
+                    AND a.PK_TRXNO = ?',[$id]);
 
             return response() -> json([
                 'status' => 200,
