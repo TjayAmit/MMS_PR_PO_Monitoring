@@ -14,11 +14,11 @@ return new class extends Migration
     public function up()
     {
         Schema::create('department', function (Blueprint $table) {
-            $table->increments('PK_department_ID');
-            $table->integer('dept_PK_msc_warehouse');
-            $table->string('dept_name');
-            $table->string('dept_shortname') -> nullable();
-            $table->timestamps();
+            $table->increments('PK_department_ID')->comment('Primary key for department')->change();
+            $table->integer('dept_PK_msc_warehouse')->comment('Warehouse Primary key that is use in BizzBox')->change();
+            $table->string('dept_name')->comment('Name of the department will be use for creating account, PR and PO')->change();
+            $table->string('dept_shortname') -> nullable() ->comment('Shortname for the department name')->change();
+            $table->timestamps()->comment('Time and date created and changes apply')->change();
         });
     }
 
