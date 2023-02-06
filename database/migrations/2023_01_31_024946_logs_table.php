@@ -14,15 +14,12 @@ return new class extends Migration
     public function up()
     {
         Schema::create('logs',function(Blueprint $table){
-            $table -> increments('PK_log_ID')->comment('Primary key for history action logs in the system')->change();;
-            $table -> string('table')->comment('Indicate what table an action has perform')->change();
-
-            $table -> integer('PK_ID') -> unsigned() -> nullable()->comment('ID of new data this are primary keys in any table')->change();
-
-            $table -> unsignedBigInteger('FK_user_ID') -> unsigned() -> nullable()->comment('Foreign key to indicate who perform the action')->change();;
+            $table -> increments('PK_log_ID');
+            $table -> string('table');
+            $table -> integer('PK_ID')-> nullable();
+            $table -> unsignedBigInteger('FK_user_ID') -> unsigned()-> nullable();
             $table -> foreign('FK_user_ID') -> references('id') -> on('users');
-
-            $table -> timestamps()->comment('Date and Time the action happen')->change();;
+            $table -> timestamps();
         });
     }
 

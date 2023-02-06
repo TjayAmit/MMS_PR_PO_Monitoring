@@ -68,5 +68,12 @@ Route::namespace('App\Http\Controllers') -> group(function(){
         Route::put('user/reset', "UserController@changePassword");
         Route::put('user/Account', "UserController@updateAccount");
         Route::delete('user', "UserController@destroy");
+
+        //Item 
+        Route::get('item', "ItemController@index");
+        Route::post('item', "ItemController@store");
+        Route::get('item/{id}', "ItemController@show");
+        Route::put('item', "ItemController@update");
+        Route::delete('item', "ItemController@delete");
     // });
 });

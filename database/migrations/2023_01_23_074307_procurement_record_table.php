@@ -14,12 +14,11 @@ return new class extends Migration
     public function up()
     {
         Schema::create('procurement_record',function(Blueprint $table){
-            $table -> increments('PK_procurement_ID')->comment('Primary key of procurement mode')->change();
-            $table -> string('procurement_description')->comment('Description of procurement')->change();
-            
-            $table -> integer('FK_pr_ID') -> unsigned() -> nullable()->comment('Identify to which purchase request this belong')->change();
+            $table -> increments('PK_procurement_ID');
+            $table -> string('procurement_description');    
+            $table -> integer('FK_pr_ID') -> unsigned() -> nullable();
             $table -> foreign('FK_pr_ID') -> references('PK_pr_ID') -> on('purchase_request') -> onUpdate('cascade');
-            $table -> timestamps()->comment('Date and time created and changes applied')->change();
+            $table -> timestamps();
         });
     }
 
