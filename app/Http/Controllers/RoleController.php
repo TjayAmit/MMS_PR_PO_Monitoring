@@ -86,10 +86,10 @@ class RoleController extends Controller
         }
     }
 
-    public function destroy(Request $request)
+    public function destroy($id)
     {
         try{
-            $data = Role::findOrFail($request -> PK_role_ID);
+            $data = Role::findOrFail($id);
             $data -> delete();
 
             return response() -> json([

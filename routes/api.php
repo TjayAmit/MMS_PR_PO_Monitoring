@@ -37,22 +37,22 @@ Route::namespace('App\Http\Controllers') -> group(function(){
         Route::get('department', "DepartmentController@index");
         Route::get('department/{id}', "DepartmentController@show");
         Route::put('department', "DepartmentController@update");
-        Route::delete('department', "DepartmentController@destroy");
         Route::post('department/bb', "DepartmentController@importDepartmentFromBizzBox");
-    
+        Route::delete('department/{id}', "DepartmentController@destroy");
+
         // Role Module
         Route::get('role', "RoleController@index");
         Route::post('role', "RoleController@store");
         Route::get('role/{id}', "RoleController@show");
         Route::put('role', "RoleController@update");
-        Route::delete('role', "RoleController@destroy");
+        Route::delete('role/{id}', "RoleController@destroy");
     
         // Procurement Module
         Route::get('procurement', "ProcurementController@index");
         Route::post('procurement', "ProcurementController@store");
         Route::get('procurement/{id}', "ProcurementController@show");
         Route::put('procurement', "ProcurementController@update");
-        Route::delete('procurement', "ProcurementController@destroy");
+        Route::delete('procurement/{id}', "ProcurementController@destroy");
     
         // Procurement Module
         Route::post('purchaserequest/bb', "PurchaseRequestController@importPurchaseRequestFromBizzBox");
@@ -60,20 +60,20 @@ Route::namespace('App\Http\Controllers') -> group(function(){
         Route::post('purchaserequest', "PurchaseRequestController@store");
         Route::get('purchaserequest/{id}', "PurchaseRequestController@show");
         Route::put('purchaserequest', "PurchaseRequestController@update");
-        Route::delete('purchaserequest', "PurchaseRequestController@destroy");
+        Route::delete('purchaserequest/{id}', "PurchaseRequestController@destroy");
     
         //User
         Route::get('user',"UserController@index");
         Route::put('user', "UserController@update");
         Route::put('user/reset', "UserController@changePassword");
         Route::put('user/Account', "UserController@updateAccount");
-        Route::delete('user', "UserController@destroy");
+        Route::delete('user/{id}', "UserController@destroy");
 
         //Item 
         Route::get('item', "ItemController@index");
         Route::post('item', "ItemController@store");
         Route::get('item/{id}', "ItemController@show");
         Route::put('item', "ItemController@update");
-        Route::delete('item', "ItemController@delete");
+        Route::delete('item/{id}', "ItemController@delete");
     // });
 });

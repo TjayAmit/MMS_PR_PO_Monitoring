@@ -118,11 +118,11 @@ class DepartmentController extends Controller
         }
     }
 
-    public function destroy(Request $request)
+    public function destroy($id)
     {
         try{
             
-            $data = Department::findOrFail($request -> PK_department_ID);
+            $data = Department::findOrFail($id);
             $data -> delete();
 
             return response() -> json([

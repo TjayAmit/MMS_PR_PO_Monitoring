@@ -96,11 +96,11 @@ class ItemController extends Controller
         }
     }
 
-    public function destroy(Request $request)
+    public function destroy($id)
     {
         try{
 
-            $item = Item::findOrFail($request -> id);
+            $item = Item::findOrFail($id);
             $item -> delete();
 
             return response() -> json([

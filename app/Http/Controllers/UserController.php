@@ -280,7 +280,7 @@ class UserController extends Controller
         }
     }
 
-    public function destroy(Request $request)
+    public function destroy($id)
     {
         try{
             $user = $request -> user();

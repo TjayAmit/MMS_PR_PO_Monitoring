@@ -86,11 +86,11 @@ class ProcurementController extends Controller
         }
     }
 
-    public function destroy(Request $request)
+    public function destroy($id)
     {
         try{
 
-            $data = Procurement::findOrFail($request -> PK_procurement_ID);
+            $data = Procurement::findOrFail($id);
             $data -> delete();
 
             return response() -> json([

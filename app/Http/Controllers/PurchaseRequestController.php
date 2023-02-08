@@ -25,7 +25,7 @@ class PurchaseRequestController extends Controller
                         dbo.mscWarehouse AS b ON a.FK_mscWarehouseFROM = b.PK_mscWarehouse INNER JOIN
                         dbo.iwPRitem AS c ON c.FK_TRXNO = a.PK_TRXNO INNER JOIN
                         dbo.iwItems AS d ON c.FK_iwItems = d.PK_iwItems LEFT JOIN
-                        dbo.iwPOitem AS po ON po.FK_iwPRitem = c.PK_iwPritem WHERE po.FK_TRXNO is null 
+                        dbo.iwPOitem AS po ON po.FK_iwPRitem = c.PK_iwPritem WHERE po.FK_TRXNO is null
                         ORDER BY a.PK_TRXNO");
             
             $bizzbox_primaryKey = '';  
@@ -203,10 +203,10 @@ class PurchaseRequestController extends Controller
         }
     }
 
-    public function destroy(Request $request)
+    public function destroy($id)
     {
         try{
-            $data = PurchaseRequest::findOrFail($request -> PK_pr_ID);
+            $data = PurchaseRequest::findOrFail($id);
             $data = delete();
 
             return response() -> json([
