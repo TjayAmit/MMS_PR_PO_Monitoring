@@ -17,20 +17,14 @@ class UserController extends Controller
     public function index(Request $request)
     {
         try{
-            $data = DB::SELECT("SELECT  u.id, p.first_name,p.middle_name,p.last_name,d.dept_name as department, 
+            $data = DB::SELECT("SELECT  u.id, u.profile, p.first_name,p.middle_name,p.last_name,d.dept_name as department, 
                 CASE WHEN u.status = 0 THEN 'PENDING' ELSE 'APPROVED' END as status 
                 FROM users u JOIN profile p ON p.FK_user_ID = u.id 
                 JOIN department d ON d.PK_department_ID = p.FK_department_ID");
 
-            return response() -> json([
-                'status' => 200,
-                'data' => $data
-            ]);
+            return response() -> json(['data' => $data],200);
         }catch(\Throwable $th){
-            return response() -> json([
-                'status' => 500,
-                'message' => $th -> getMessage()
-            ]);
+            return response() -> json(['message' => $th -> getMessage()],500);
         }
     }
 
@@ -38,6 +32,10 @@ class UserController extends Controller
     {
         try{
             $user = $request -> user();
+
+            if(!$user){
+                return response() -> json(['message' => "Un-authorized."],401);
+            }
             
             $account = DB::SELECT('SELECT p.PK_profile_ID,p.first_name,p.middle_name, r.name as role,
                 p.last_name,d.dept_name as department,p.FK_role_ID as FROM profile p 
@@ -49,15 +47,9 @@ class UserController extends Controller
             $response -> department = $account[0] -> department;
             $response -> role = $account[0] -> role;
 
-            return response() -> json([
-                'status' => 200,
-                'data' => $response
-            ]);
+            return response() -> json(['data' => $response],200);
         }catch(\Throwable $th){
-            return response() -> json([
-                'status' => 500,
-                'message' => $th -> getMessage()
-            ]);
+            return response() -> json(['message' => $th -> getMessage()],500);
         }
     }
 
@@ -69,18 +61,12 @@ class UserController extends Controller
 
             if(!$data)
             {
-                return response() -> json([
-                    "status" => 404,
-                    "message" => "No Account was found for user ".$request['username'].'.'
-                ]);
+                return response() -> json(["message" => "No Account was found for user ".$request['username'].'.'],404);
             }
 
             if($data[0] -> status === 0)
             {   
-                return response() -> json([
-                    'status' => 401,
-                    'message' => 'You are not approved'
-                ]);
+                return response() -> json(['message' => 'You are not approved'],401);
             }
 
             if(Auth::attempt(['email' => $data[0] -> email,'password' => $request -> password]))
@@ -92,10 +78,7 @@ class UserController extends Controller
 
                 if(!$account)
                 {
-                    return response() -> json([
-                        'status' => 404,
-                        'path' => "/account"
-                    ]) -> withCookie(cookie('i?',$data[0] -> id, 60));
+                    return response() -> json(['path' => "/account"],404) -> withCookie(cookie('i?',$data[0] -> id, 60));
                 }
 
                 $name = $account[0] -> first_name.' '.$account[0] -> last_name;
@@ -105,21 +88,12 @@ class UserController extends Controller
                 $res['department'] = $account[0] -> department;
                 $res['role'] = $account[0] -> role;
                 
-                return response() -> json([
-                    "status" => 200,
-                    "data" => $res
-                ]) -> withCookie(cookie('Token',$token -> plainTextToken,120));
+                return response() -> json(["data" => $res],200) -> withCookie(cookie('Token',$token -> plainTextToken,120));
             }
             
-            return response() -> json([
-                'status' => 401,
-                'message' => "Email or password incorrect"
-            ]);
+            return response() -> json(['message' => "Email or password incorrect"],401);
         }catch(\Throwable $th){
-            return response() -> json([
-                "status" => 500,
-                "message" => $th -> getMessage()
-            ]);
+            return response() -> json(["message" => $th -> getMessage()],500);
         }
     }
 
@@ -130,7 +104,7 @@ class UserController extends Controller
             $user = new User;
             $user -> name = $request -> username;
             $user -> email = $request -> email;
-            $user -> profile = null;
+            $user -> profile = $request -> url;
             $user -> password = Hash::make($request -> password);
             $user -> status = 1;
             $user -> created_at = now();
@@ -139,16 +113,10 @@ class UserController extends Controller
             
             $minute = 60;
 
-            return response() -> json([
-                'status' => 200,
-                'data' => "Account register."
-            ]) -> withCookie(cookie('identity',$user -> id, $minute));
+            return response() -> json(['data' => "Account register."],200) -> withCookie(cookie('identity',$user -> id, $minute));
             
         }catch(\Throwable $th){
-            return response() -> json([
-                'status' => 500,
-                'message' => $th -> getMessage()
-            ]);
+            return response() -> json(['message' => $th -> getMessage()],500);
         }
     }
 
@@ -159,10 +127,7 @@ class UserController extends Controller
 
             if(!$hasCookie)
             {   
-                return response() -> json([
-                    'status' => 404,
-                    'message' => 'Something went wrong, identity not found.'
-                ]);
+                return response() -> json(['message' => 'Something went wrong, identity not found.'],404);
             }
             
             $userID = $request -> cookie('identity');
@@ -193,63 +158,48 @@ class UserController extends Controller
                     $response['department']  = $userInformation[0] -> department;
                     $response['role'] = $userInformation[0] -> role;
                     
-                    return response() -> json([
-                        "status" => 200,
-                        "data" => $response
-                    ]) -> withCookie(cookie('Token',$token -> plainTextToken,120));
+                    return response() -> json(["data" => $response],200) -> withCookie(cookie('Token',$token -> plainTextToken,120));
                 }
             }
 
-            return response() -> json([
-                'status' => 200,
-                'message' => "Please wait for approval."
-            ]);
+            return response() -> json(['message' => "Please wait for approval."],200);
         }catch(\Throwable $th){
-            return response() ->json([
-                'status' => 500,
-                'message' => $th -> getMessage()
-            ]);
+            return response() ->json(['message' => $th -> getMessage()],500);
         }
     }
 
     public function update(Request $request)
     {
         try{
-            $user = $request -> user();
+            $userID = 1;
+            $data = User::findOrFail($request -> id);
+            $data -> status = $request -> status;
+            $data -> updated_at = now();
+            $data -> save();
 
-            $user -> profile = $request -> profile;
-            $user -> status = $request -> status;
-            $user -> save();
+            $res = $this -> registerLogs("Account Status Update", $request -> id, $userID);
 
-            return response() -> json([
-                'status' => 200,
-                'data' => $data
-            ]);
-        }catch(\Throwable $th){
-            return response() -> json([
-                'status' => 500,
-                'message' => $th -> getMessage()
-            ]);
+            return response() -> json(["data" => $data],200);
+
+        } catch(\Throwable $th){
+            return response() -> json(["message" => $th -> getMessage()],500);
         }
     }
 
     public function changePassword(Request $request)
     {
         try{
+            $userID = 1;
             $user = $request -> user();
 
             $user -> password = Hash::make($request -> password);
             $user -> save();
 
-            return response() -> json([
-                'status' => 200,
-                'data' => "Password updated."
-            ]);
+            $res = $this -> registerLogs("Change password.", $user -> id, $userID);
+
+            return response() -> json(['data' => "Password updated."],200);
         }catch(\Throwable $th){
-            return response() -> json([
-                'status' => 500,
-                'message' => $th -> getMessage()
-            ]);
+            return response() -> json(['message' => $th -> getMessage()],500);
         }
     }
 
@@ -268,35 +218,43 @@ class UserController extends Controller
             $data -> save();
 
 
-            return rsponse() -> json([
-                'staus' => 200,
-                'dat' => $data
-            ]);
+            return rsponse() -> json(['data' => $data],200);
         }catch(\Throable $th){
-            return rpsonse() -> json([
-                'staus' => 500,
-                'mesage' => $th -> getMessage()
-            ]);
+            return rpsonse() -> json(['mesage' => $th -> getMessage()],500);
         }
     }
 
     public function destroy($id)
     {
         try{
+            $userID = 1;
             $user = $request -> user();
 
             $user -> delete();
 
-            return response() -> json([
-                'status' => 200,
-                'data' => 'Account deleted.'
-            ]);
+            $res = $this -> registerLogs("Delete", $id,$userID);
+
+            return response() -> json(['data' => 'Account deleted.'],200);
         }catch(\Throwable $th){
-            return response() -> json([
-                'status' => 500,
-                'message' => $th -> getMessage()
-            ]);
+            return response() -> json(['message' => $th -> getMessage()],500);
         }
     }
 
+    public function registerLogs($task, $id, $userID)
+    {
+        try{
+            $data = new Logs();
+            $data -> task = $task;
+            $data -> table_name = "User";
+            $data -> PK_ID = $id;
+            $data -> FK_user_ID = $userID;
+            $data -> created_at = now();
+            $data -> updated_at = now();
+            $data -> save();
+
+            return "Logs registered";
+        }catch(\Throwable $th){
+            return "failed to create logs";
+        }
+    }
 }

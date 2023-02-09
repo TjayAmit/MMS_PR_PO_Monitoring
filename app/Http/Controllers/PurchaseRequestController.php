@@ -16,6 +16,7 @@ class PurchaseRequestController extends Controller
     public function importPurchaseRequestFromBizzBox()
     {
         try{
+            $userID = 1;
 
             //Fetch purchase list from bizzbox removing test data.
             $data = DB::connection("sqlsrv")->SELECT("SELECT  a.PK_TRXNO,
@@ -106,15 +107,11 @@ class PurchaseRequestController extends Controller
                 $bizzbox_primaryKey = $val -> PK_TRXNO;
             }
 
-            return response() -> json([
-                'status' => 200,
-                'data' => "Successfully imported purchase request from bizzbox"
-            ]);
+            $res = $this -> registerLogs("Import Purchase Request",null, $userID);
+
+            return response() -> json(['data' => "Successfully imported purchase request from bizzbox"],200);
         }catch(\Throwable $th){
-            return response() -> json([
-                'status' => 500,
-                'message' => $th -> getMessage()
-            ]);
+            return response() -> json(['message' => $th -> getMessage()],500);
         }
     }
 
@@ -122,25 +119,20 @@ class PurchaseRequestController extends Controller
     {
         try{
             // FETCH LIST OF PURCHASE REQUEST IN PR PO DATABASE
-            $data = DB::SELECT('SELECT pr.PK_pr_ID,pr.pr_Prxno,d.dept_name,ps.procurement_description,pr.pr_date,pr.updated_at  FROM purchase_request AS pr 
+            $data = DB::SELECT('SELECT pr.PK_pr_ID,pr.pr_Prxno,d.dept_name,ps.procurement_description,pr.pr_date as date,pr.updated_at  FROM purchase_request AS pr 
             JOIN department d ON pr.FK_department_ID = d.PK_department_ID 
-            JOIN procurement_record ps ON ps.FK_pr_ID = pr.PK_pr_ID');
+            JOIN procurement_record ps ON ps.FK_pr_ID = pr.PK_pr_ID ORDER BY pr.pr_date DESC');
 
-            return response() -> json([
-                'status' => 200,
-                'data' => $data
-            ]);
+            return response() -> json(['data' => $data],200);
         }catch(\Throwable $th){
-            return response() -> json([
-                'status' => 500,
-                'message' => $th -> getMessage()
-            ]);
+            return response() -> json(['message' => $th -> getMessage()],500);
         }
     }
 
     public function store(Request $request)
     {
         try{
+            $userID = 1;
             $data = new PurchaseRequest;
 
             $data -> pr_Prxno = $request -> PRXNO;
@@ -148,15 +140,11 @@ class PurchaseRequestController extends Controller
             $data -> pr_remarks = $request -> Remarks;
             $data -> save();
 
-            return response() -> json([
-                'status' => 200,
-                'data' => 'Purchase Request has successfully registered.'
-            ]);
+            $res = $this -> registerLogs("Post", $data -> PK_pr_ID, $userID);
+
+            return response() -> json(['data' => 'Purchase Request has successfully registered.'],200);
         }catch(\Throwable $th){
-            return response() -> json([
-                'status' => 500,
-                'message' => $th -> getMessage()
-            ]);
+            return response() -> json(['message' => $th -> getMessage()],500);
         }
     }
 
@@ -167,15 +155,9 @@ class PurchaseRequestController extends Controller
                 quantity,unit,price, CASE WHEN procurement_remarks <> null THEN procurement_remarks ELSE "NONE" END remarks,
                 (quantity * price) as total FROM items WHERE FK_pr_ID = ?',[$id]);
 
-            return response() -> json([
-                'status' => 200,
-                'data' => $data
-            ]);
+            return response() -> json(['data' => $data],500);
         }catch(\Throwable $th){
-            return response() -> json([
-                'status' => 500,
-                'message' => $th -> getMessage()
-            ]);
+            return response() -> json(['message' => $th -> getMessage()],500);
         }
     }
 
@@ -188,36 +170,51 @@ class PurchaseRequestController extends Controller
             // $data -> pr_department = $request -> Department;
             // $data -> pr_remarks = $request -> Remarks;
             // $data -> save();
+            $userID = 1;
 
-            $res = DB::SELECT("UPDATE purchase_request SET FK_procurement_ID = 1");
+            $pr = PurchaseRequest::findOrFail($request -> id);
+            $pr -> procurement_description = $request -> description;
+            $pr -> updated_at = now();
+            $pr -> save();
 
-            return response() -> json([
-                'status' => 200,
-                'data' => "Purchase Request successfully updated."
-            ]);
+            $res = $this -> registerLogs("Update", $request -> id, $userID);
+
+            return response() -> json(['data' => "Purchase Request successfully updated."],200);
         }catch(\Throwable $th){
-            return response() -> json([
-                'status' => 500,
-                'message' => $th -> getMessage()
-            ]);
+            return response() -> json(['message' => $th -> getMessage()],500);
         }
     }
 
     public function destroy($id)
     {
         try{
+            $userID = 1;
             $data = PurchaseRequest::findOrFail($id);
             $data = delete();
 
-            return response() -> json([
-                'status' => 200,
-                'data' => "Successfully deleted."
-            ]);
+            $res = $this -> registerLogs("Delete", $id, $userID);
+
+            return response() -> json(['data' => "Successfully deleted."],200);
         }catch(\Throwable $th){
-            return response() -> json([
-                'status' => 500,
-                'message' => $th -> getMessage()
-            ]);
+            return response() -> json(['message' => $th -> getMessage()],500);
+        }
+    }
+
+    public function registerLogs($task, $id, $userID)
+    {
+        try{
+            $data = new Logs();
+            $data -> task = $task;
+            $data -> table_name = "Purchase Request";
+            $data -> PK_ID = $id;
+            $data -> FK_user_ID = $userID;
+            $data -> created_at = now();
+            $data -> updated_at = now();
+            $data -> save();
+
+            return "Logs registered";
+        }catch(\Throwable $th){
+            return "failed to create logs";
         }
     }
 }

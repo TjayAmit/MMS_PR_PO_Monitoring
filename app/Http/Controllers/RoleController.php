@@ -14,15 +14,9 @@ class RoleController extends Controller
         try{
             $data = DB::SELECT('SELECT * FROM role');
 
-            return response() -> json([
-                'status' => 200,
-                'data' => $data
-            ]);
+            return response() -> json(['data' => $data],200);
         }catch(\Throwable $th){
-            return response() -> json([
-                'status' => 500,
-                'message' => $th -> getMessage()
-            ]);
+            return response() -> json(['message' => $th -> getMessage()],500);
         }
     }
 
@@ -36,15 +30,9 @@ class RoleController extends Controller
             $data->updated_at = now();
             $data -> save();
             
-            return response() -> json([
-                'status' => 200,
-                'data' => $data
-            ]);
+            return response() -> json(['data' => $data],200);
         }catch(\Throwable $th){
-            return response() -> json([
-                'status' => 500,
-                'message' => $th -> getMessage()
-            ]);
+            return response() -> json(['message' => $th -> getMessage()],500);
         }
     }
 
@@ -53,15 +41,9 @@ class RoleController extends Controller
         try{
             $data = DB::SELECT('SELECT * FROM role WHERE PK_role_ID = ?',[$request -> PK_role_ID]);
 
-            return response() -> json([
-                'status' => 200,
-                'data' => $data
-            ]);
+            return response() -> json(['data' => $data],200);
         }catch(\Throwable $th){
-            return response() -> json([
-                'status' => 500,
-                'message' => $th -> getMessage()
-            ]);
+            return response() -> json(['message' => $th -> getMessage()],500);
         }
     }
 
@@ -74,15 +56,9 @@ class RoleController extends Controller
             $data -> updated_at = now();
             $data -> save();
 
-            return response() -> json([
-                'status' => 200,
-                'data' => 'Role Updated.'
-            ]);
+            return response() -> json(['data' => 'Role Updated.'],200);
         }catch(\Throwable $th){
-            return response() -> json([
-                'status' => 500,
-                'message' => $th -> getMesssage()
-            ]);
+            return response() -> json(['message' => $th -> getMesssage()],500);
         }
     }
 
@@ -92,15 +68,9 @@ class RoleController extends Controller
             $data = Role::findOrFail($id);
             $data -> delete();
 
-            return response() -> json([
-                'status' => 200,
-                'message' => "Role is successfully deleted" 
-            ]);
+            return response() -> json(['message' => "Role is successfully deleted"],200);
         }catch(\Throwable $th){
-            return response() -> json([
-                'status' => 500,
-                'message' => $th -> getMessage()
-            ]);
+            return response() -> json(['message' => $th -> getMessage()],500);
         }
     }
 }

@@ -15,15 +15,9 @@ class ProcurementController extends Controller
         try{
             $data = DB::SELECT('SELECT * FROM procurement_status');
 
-            return response() -> json([
-                'status' => 200,
-                'data' => $data
-            ]);
+            return response() -> json(['data' => $data],200);
         }catch(\Throwable $th){
-            return response() -> json([
-                'status' => 500,
-                'message' => $th -> getMessage()
-            ]);
+            return response() -> json(['message' => $th -> getMessage()],500);
         }
     }
 
@@ -36,15 +30,9 @@ class ProcurementController extends Controller
             $data -> updated_at = now();
             $data -> save();
 
-            return response() -> json([
-                'status' => 200,
-                'data' => 'Procurement status description successfully registered.'
-            ]);
+            return response() -> json(['data' => 'Procurement status description successfully registered.'],200);
         }catch(\Throwable $th){
-            return response() -> json([
-                'status' => 500,
-                'message' => $th -> getMessage()
-            ]);
+            return response() -> json(['message' => $th -> getMessage()],500);
         }
     }
 
@@ -53,15 +41,9 @@ class ProcurementController extends Controller
         try{
             $data = DB::SELECT('SELECT * FROM procurement_status WHERE PK_procurement_ID = ?',[$request -> PK_procurement_ID]);
 
-            return response() -> json([
-                'status' => 200,
-                'data' => $data
-            ]);
+            return response() -> json(['data' => $data],200);
         }catch(\Throwable $th){
-            return response() -> json([
-                'status' => 500,
-                'message' => $th -> getMessage()
-            ]);
+            return response() -> json(['message' => $th -> getMessage()],500);
         }
     }
 
@@ -79,10 +61,7 @@ class ProcurementController extends Controller
                 'data' => 'Procurement status description has successfully updated.'
             ]);
         }catch(\Throwable $th){
-            return response() -> json([
-                'status' => 500,
-                'message' => $th -> getMessage()
-            ]);
+            return response() -> json(['message' => $th -> getMessage()],500);
         }
     }
 
@@ -93,15 +72,9 @@ class ProcurementController extends Controller
             $data = Procurement::findOrFail($id);
             $data -> delete();
 
-            return response() -> json([
-                'status' => 200,
-                'data' =>'Procurement description has successfully deleted.'
-            ]);
+            return response() -> json(['data' =>'Procurement description has successfully deleted.'],200);
         }catch(\Throwable $th){
-            return response() -> json([
-                'status' => 500,
-                'message' => $th -> getMessage()
-            ]);
+            return response() -> json(['message' => $th -> getMessage()],500);
         }
     }
 }

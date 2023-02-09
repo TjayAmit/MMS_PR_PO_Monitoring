@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 use App\Models\Department;
+use App\Models\Logs;
 
 class DepartmentController extends Controller
 {
@@ -13,6 +14,8 @@ class DepartmentController extends Controller
     public function importDepartmentFromBizzBox()
     {
         try{
+            $userID = 1;
+
             //Fetch department list from bizzbox removing test data.
             $data = DB::connection("sqlsrv")->SELECT("SELECT * from mscWarehouse WHERE description <> 'Not Applicable'");
 
@@ -29,16 +32,12 @@ class DepartmentController extends Controller
                 $department -> save();
             }
 
-            return response() -> json([
-                'status' => 200,
-                'data' => "Successfully registered department from the bizzbox."
-            ]);
+            $res = $this -> registerLogs('Import Department Data.', null, $userID);
+
+            return response() -> json(['data' => "Successfully registered department from the bizzbox."],200);
 
         }catch(\Throwable $th){
-            return response() -> json([
-                'status' => 500,
-                'message' => $th -> getMessage()
-            ]);
+            return response() -> json(['message' => $th -> getMessage()],500);
         }
     }
 
@@ -48,15 +47,9 @@ class DepartmentController extends Controller
         try{
             $data = DB::SELECT("SELECT PK_department_ID AS id, dept_name AS name FROM department");
 
-            return response() -> json([
-                'status' => 200,
-                'data' => $data
-            ]);
+            return response() -> json(['data' => $data],200);
         }catch(\Throwable $th){
-            return response() -> json([
-                'status' => 500,
-                'message' => $th -> getMessage()
-            ]);
+            return response() -> json(['message' => $th -> getMessage()],500);
         }
     }
 
@@ -65,40 +58,30 @@ class DepartmentController extends Controller
         try{
            $data = DB::SELECT("SELECT d.PK_department_ID, d.dept_PK_msc_warehouse, d.dept_name,
            (SELECT count(p.PK_pr_ID) FROM purchase_request p WHERE p.FK_department_ID = d.PK_department_ID) as total_pr, 
-           d.dept_shortname, d.created_at FROM department d");
+           d.dept_shortname, d.created_at as date FROM department d");
 
-            return response() -> json([
-                'status' => 200,
-                'data' => $data
-            ]);
+            return response() -> json(['data' => $data],200);
         }catch(\Throwable $th){
-            return response() -> json([
-                'status' => 500,
-                'message' => $th -> getMessage()
-            ]);
+            return response() -> json(['message' => $th -> getMessage()],500);
         }
     }
 
     public function show(Request $request)
     {
         try{
+            $userID = 1;
             $data = DB::SELECT('SELECT * FROM department WHERE PK_department_ID = ? ',[$request -> PK_department_ID]);
 
-            return response() -> json([
-                'status' => 200,
-                'data' => $data
-            ]);
+            return response() -> json(['data' => $data],200);
         }catch(\Throwable $th){
-            return response() -> json([
-                'status' => 500,
-                'message' => $th -> getMessage()
-            ]);
+            return response() -> json(['message' => $th -> getMessage()],500);
         }
     }
 
     public function update(Request $request)
     {
         try{
+            $userID = 1;
             $data = DB::SELECT('SELECT * FROM department WHERE PK_department_ID = ?',[$request -> PK_department_ID]);
 
             $data -> dept_name = $request -> dept_name;
@@ -106,34 +89,46 @@ class DepartmentController extends Controller
             $data -> updated_at = now();
             $data -> save();
 
-            return response() -> json([
-                'status' => 200,
-                'data' => $data,
-            ]);
+            $res = $this -> registerLogs('Update',$request -> PK_department_ID, $userID);
+
+            return response() -> json(['data' => $data],200);
         } catch(\Throwable $th){
-            return response() -> json([
-                'status' => 500,
-                'message' => $th -> getMessage()
-            ]);
+            return response() -> json(['message' => $th -> getMessage()],500);
         }
     }
 
     public function destroy($id)
     {
         try{
-            
+            $userID = 1;
+
             $data = Department::findOrFail($id);
             $data -> delete();
 
-            return response() -> json([
-                'status' => 200,
-                'message' => "Department is successfully deleted" 
-            ]);
+            $res = $this -> registerLogs('Delete', $id, $userID);
+
+            return response() -> json(['message' => "Department is successfully deleted"],200);
         }catch(\Throwable $th){
-            return response() -> json([
-                'status' => 500,
-                'message' => $th -> getMessage()
-            ]);
+            return response() -> json(['message' => $th -> getMessage()],500);
+        }
+    }
+
+
+    public function registerLogs($task, $id, $userID)
+    {
+        try{
+            $data = new Logs();
+            $data -> task = $task;
+            $data -> table_name = "Department";
+            $data -> PK_ID = $id;
+            $data -> FK_user_ID = $userID;
+            $data -> created_at = now();
+            $data -> updated_at = now();
+            $data -> save();
+
+            return "Logs registered";
+        }catch(\Throwable $th){
+            return "failed to create logs";
         }
     }
 }

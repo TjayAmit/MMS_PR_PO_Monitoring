@@ -14,7 +14,8 @@ class Logs extends Model
     protected $primaryKey = "PK_log_ID";
 
     protected $fillable = [
-        'table',
+        'table_name',
+        'task',
         'PK_ID',
         'created_at',
     ];

@@ -15,7 +15,8 @@ return new class extends Migration
     {
         Schema::create('logs',function(Blueprint $table){
             $table -> increments('PK_log_ID');
-            $table -> string('table');
+            $table -> string('task');
+            $table -> string('table_name');
             $table -> integer('PK_ID')-> nullable();
             $table -> unsignedBigInteger('FK_user_ID') -> unsigned()-> nullable();
             $table -> foreign('FK_user_ID') -> references('id') -> on('users');

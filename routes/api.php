@@ -75,5 +75,12 @@ Route::namespace('App\Http\Controllers') -> group(function(){
         Route::get('item/{id}', "ItemController@show");
         Route::put('item', "ItemController@update");
         Route::delete('item/{id}', "ItemController@delete");
+
+        //Logs
+        Route::get('logs',"LogsController@index");
+        Route::post('logs',"LogsController@store");
+        Route::get('logs/{id}',"LogsController@show");
+        Route::put('logs',"LogsController@update");
+        Route::delete('logs',"LogsController@destroy");
     // });
 });
