@@ -13,7 +13,7 @@ class ProcurementController extends Controller
     public function index()
     {
         try{
-            $data = DB::SELECT('SELECT * FROM procurement_status');
+            $data = DB::SELECT('SELECT * FROM procurement_record');
 
             return response() -> json(['data' => $data],200);
         }catch(\Throwable $th){
@@ -25,7 +25,8 @@ class ProcurementController extends Controller
     {
         try{
             $data = new Procurement;
-            $data -> procurement_description = $request -> description;
+            $data -> procurement_description = $request -> message;
+            $data -> FK_pr_ID = $request -> id;
             $data -> created_at = now();
             $data -> updated_at = now();
             $data -> save();
@@ -36,10 +37,10 @@ class ProcurementController extends Controller
         }
     }
 
-    public function show(Request $request)
+    public function show($id)
     {
         try{
-            $data = DB::SELECT('SELECT * FROM procurement_status WHERE PK_procurement_ID = ?',[$request -> PK_procurement_ID]);
+            $data = DB::SELECT('SELECT procurement_description as description, created_at as date FROM procurement_record WHERE FK_pr_ID = ?',[$id]);
 
             return response() -> json(['data' => $data],200);
         }catch(\Throwable $th){

@@ -12,7 +12,7 @@ class LogsController extends Controller
     public function index()
     {
         try{
-            $data = DB::SELECT("SELECT PK_logs_ID, task,table_name, PK_ID, FK_user_ID, created_at as date, updated_at FROM logs");
+            $data = DB::SELECT("SELECT PK_log_ID, task,table_name, PK_ID, FK_user_ID, created_at as date, updated_at FROM logs");
 
             return response() -> json(["data" => $data],200);
         }catch(\Throwable $th){
@@ -43,7 +43,7 @@ class LogsController extends Controller
     public function show($id)
     {
         try{   
-            $data = DB::SELECT("SELECT PK_logs_ID, task, table_name, PK_ID, FK_user_ID, created_at as date, updated_at FROM logs WHERE PK_logs_ID = ?",[$id]);
+            $data = DB::SELECT("SELECT PK_log_ID, task, table_name, PK_ID, FK_user_ID, created_at as date, updated_at FROM logs WHERE PK_logs_ID = ?",[$id]);
 
             return response() -> json(["data" => $data],200);
         }catch(\Throwable $th){

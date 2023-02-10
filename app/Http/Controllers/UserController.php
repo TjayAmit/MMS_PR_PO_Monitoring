@@ -84,6 +84,9 @@ class UserController extends Controller
                 $name = $account[0] -> first_name.' '.$account[0] -> last_name;
                 $user = Auth::user();
                 $token = $user -> createToken($request -> ip());
+                $expiration = now()->addHours(2);
+                $token->expires_at = $expiration;
+                $token->save();
                 $res['name'] = $name;
                 $res['department'] = $account[0] -> department;
                 $res['role'] = $account[0] -> role;
@@ -153,7 +156,9 @@ class UserController extends Controller
                 {
                     $user = Auth::user();
                     $token = $user -> createToken($request -> ip());
-
+                    $expiration = now()->addHours(2);
+                    $token->expires_at = $expiration;
+                    $token->save();
                     $response['name'] = $profile -> first_name.' '.$profile -> last_name;
                     $response['department']  = $userInformation[0] -> department;
                     $response['role'] = $userInformation[0] -> role;
