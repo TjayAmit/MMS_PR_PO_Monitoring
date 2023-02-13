@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 use App\Models\PurchaseRequest;
 use App\Models\Procurement;
-use App\Models\Item;
+use App\Models\Items;
 
 class PurchaseRequestController extends Controller
 {
@@ -63,7 +63,7 @@ class PurchaseRequestController extends Controller
 
                 if($bizzbox_primaryKey === $val -> PK_TRXNO){
                     // Register product under a specific Purchase Request
-                    $item = new Item();
+                    $item = new Items();
                     $item -> PK_iwItems = $val -> PK_iwItems;
                     $item -> description = $val -> itemdesc;
                     $item -> quantity = $val -> qty;
@@ -92,7 +92,7 @@ class PurchaseRequestController extends Controller
                     $procurement -> save();
 
                     // Register product under a specific Purchase Request
-                    $item = new Item();
+                    $item = new Items();
                     $item -> PK_iwItems = $val -> PK_iwItems;
                     $item -> description = $val -> itemdesc;
                     $item -> quantity = $val -> qty;
@@ -119,7 +119,9 @@ class PurchaseRequestController extends Controller
     {
         try{
             // FETCH LIST OF PURCHASE REQUEST IN PR PO DATABASE
-            $data = DB::SELECT('SELECT pr.PK_pr_ID,pr.pr_Prxno,d.dept_name,ps.procurement_description,pr.pr_date as date,pr.updated_at  FROM purchase_request AS pr 
+            $data = DB::SELECT('SELECT  pr.PK_pr_ID, pr.pr_no, pr.rcc,pr.fund_cluster,pr.pr_Prxno,d.dept_name,
+            pr.sol_no, pr.procurement_date, pr.posting_date, pr.opening_date,
+            ps.procurement_description,pr.pr_date as date,pr.updated_at  FROM purchase_request AS pr 
             JOIN department d ON pr.FK_department_ID = d.PK_department_ID 
             JOIN procurement_record ps ON ps.FK_pr_ID = pr.PK_pr_ID ORDER BY pr.pr_date DESC');
 
@@ -128,6 +130,7 @@ class PurchaseRequestController extends Controller
             return response() -> json(['message' => $th -> getMessage()],500);
         }
     }
+
 
     public function store(Request $request)
     {
@@ -151,13 +154,16 @@ class PurchaseRequestController extends Controller
     public function show($id)
     {
         try{
-            $data = DB::SELECT('SELECT PK_item_ID, PK_iwItems, description,
-                quantity,unit,price, CASE WHEN procurement_remarks <> null THEN procurement_remarks ELSE "NONE" END remarks,
-                (quantity * price) as total FROM items WHERE FK_pr_ID = ?',[$id]);
+            $data = DB::SELECT('SELECT * FROM purchase_request WHERE PK_pr_ID = ?',[$id]);
 
-            return response() -> json(['data' => $data],500);
+            if(!$data){
+                return response() -> json(['message' => "No record found."],404);
+            }
+
+            return response() -> json(["data" => $data[0]], 200);
+
         }catch(\Throwable $th){
-            return response() -> json(['message' => $th -> getMessage()],500);
+            return response() -> json(["message" => $th -> getMessage()],500);
         }
     }
 

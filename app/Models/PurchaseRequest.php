@@ -14,10 +14,17 @@ class PurchaseRequest extends Model
     protected $primaryKey = 'PK_pr_ID';
 
     protected $fillable = [
+        'pr_no',
+        'rcc',
+        'fund_cluster',
         'pr_Prxno',
         'pr_department',
         'pr_remarks',
-        'pr_date'
+        'sol_no',
+        'procurement_date',
+        'posting_date',
+        'opening_date',
+        'pr_date',
     ];
 
     protected $timestamp = TRUE;

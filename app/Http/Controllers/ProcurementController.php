@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 use App\Models\Procurement;
+use App\Models\PurchaseRequest;
 
 class ProcurementController extends Controller
 {
@@ -30,6 +31,17 @@ class ProcurementController extends Controller
             $data -> created_at = now();
             $data -> updated_at = now();
             $data -> save();
+
+            $pr = PurchaseRequest::find($request -> id);
+            $pr -> pr_no = $request -> prNo;
+            $pr -> rcc  = $request -> rcc;
+            $pr -> fund_claster = $request -> fund;
+            $pr -> sol_no = $request -> solNo;
+            $pr -> procurementDate = $request -> procurementDate;
+            $pr -> posting_date = $request -> postingDate;
+            $pr -> opening_date = $request -> openingDate;
+            $pr -> updated_at = now();
+            $pr -> save();
 
             return response() -> json(['data' => 'Procurement status description successfully registered.'],200);
         }catch(\Throwable $th){
