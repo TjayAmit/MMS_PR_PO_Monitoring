@@ -110,6 +110,7 @@ class UserController extends Controller
             $user -> profile = $request -> url;
             $user -> password = Hash::make($request -> password);
             $user -> status = 1;
+            $user -> system = 1;
             $user -> created_at = now();
             $user -> updated_at = now();
             $user -> save();
@@ -173,16 +174,33 @@ class UserController extends Controller
         }
     }
 
+    public function show($id)
+    {
+        try{
+            $data = DB::table('users') -> join('profile','profile.FK_user_ID','=','users.id')->where('users.id','=',$id) -> get();
+
+            if(!$data){
+                return response(['message' => "No records found"], 401);
+            }
+
+            return response(['data' => $data],200);
+        }catch(\Throwable $th){
+            return response() -> json(["message" => $th -> getMessage()],500);
+        }
+    }
+
     public function update(Request $request)
     {
         try{
             $userID = 1;
+            $ip = $request -> ip();
+
             $data = User::findOrFail($request -> id);
             $data -> status = $request -> status;
             $data -> updated_at = now();
             $data -> save();
 
-            $res = $this -> registerLogs("Account Status Update", $request -> id, $userID);
+            $res = $this -> registerLogs($ip,"Account Status Update", $request -> id, $userID);
 
             return response() -> json(["data" => $data],200);
 
@@ -196,11 +214,12 @@ class UserController extends Controller
         try{
             $userID = 1;
             $user = $request -> user();
+            $ip = $request -> ip();
 
             $user -> password = Hash::make($request -> password);
             $user -> save();
 
-            $res = $this -> registerLogs("Change password.", $user -> id, $userID);
+            $res = $this -> registerLogs($ip,"Change password.", $user -> id, $userID);
 
             return response() -> json(['data' => "Password updated."],200);
         }catch(\Throwable $th){
@@ -234,10 +253,11 @@ class UserController extends Controller
         try{
             $userID = 1;
             $user = $request -> user();
+            $ip = $request -> ip();
 
             $user -> delete();
 
-            $res = $this -> registerLogs("Delete", $id,$userID);
+            $res = $this -> registerLogs($ip,"Delete", $id,$userID);
 
             return response() -> json(['data' => 'Account deleted.'],200);
         }catch(\Throwable $th){
@@ -245,11 +265,12 @@ class UserController extends Controller
         }
     }
 
-    public function registerLogs($task, $id, $userID)
+    public function registerLogs($ip, $task, $id, $userID)
     {
         try{
             $data = new Logs();
             $data -> task = $task;
+            $data -> ip_address = $ip;
             $data -> table_name = "User";
             $data -> PK_ID = $id;
             $data -> FK_user_ID = $userID;

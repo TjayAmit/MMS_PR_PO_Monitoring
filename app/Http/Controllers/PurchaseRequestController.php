@@ -28,7 +28,7 @@ class PurchaseRequestController extends Controller
                         dbo.iwItems AS d ON c.FK_iwItems = d.PK_iwItems LEFT JOIN
                         dbo.iwPOitem AS po ON po.FK_iwPRitem = c.PK_iwPritem WHERE po.FK_TRXNO is null
                         ORDER BY a.PK_TRXNO");
-            
+
             $bizzbox_primaryKey = '';  
             // changes apply to import all products available in Purchase Ruquest
             // This is need to be able attach produrement description per product
@@ -43,7 +43,7 @@ class PurchaseRequestController extends Controller
                 // Check if the Purchase Request Transaction Number exist and if does ignore
                 // Including if Product ID exist
                 // to prevent changes in existing procurement mode.
-                
+
                 if($pr && $item)
                 { continue; }
 
@@ -136,6 +136,7 @@ class PurchaseRequestController extends Controller
     {
         try{
             $userID = 1;
+            $ip = $request -> ip();
             $data = new PurchaseRequest;
 
             $data -> pr_Prxno = $request -> PRXNO;
@@ -143,7 +144,7 @@ class PurchaseRequestController extends Controller
             $data -> pr_remarks = $request -> Remarks;
             $data -> save();
 
-            $res = $this -> registerLogs("Post", $data -> PK_pr_ID, $userID);
+            $res = $this -> registerLogs($ip,"Post", $data -> PK_pr_ID, $userID);
 
             return response() -> json(['data' => 'Purchase Request has successfully registered.'],200);
         }catch(\Throwable $th){
@@ -170,6 +171,8 @@ class PurchaseRequestController extends Controller
     public function update(Request $request)
     {
         try{
+            
+            $ip = $request -> ip();
             // $data = PurchaseRequest::findOrFail($request -> PK_pr_ID);
 
             // $data -> pr_Prxno = $request -> PRXNO;
@@ -183,7 +186,7 @@ class PurchaseRequestController extends Controller
             $pr -> updated_at = now();
             $pr -> save();
 
-            $res = $this -> registerLogs("Update", $request -> id, $userID);
+            $res = $this -> registerLogs($ip,"Update", $request -> id, $userID);
 
             return response() -> json(['data' => "Purchase Request successfully updated."],200);
         }catch(\Throwable $th){
@@ -195,10 +198,12 @@ class PurchaseRequestController extends Controller
     {
         try{
             $userID = 1;
+            $ip = $request -> ip();
+
             $data = PurchaseRequest::findOrFail($id);
             $data = delete();
 
-            $res = $this -> registerLogs("Delete", $id, $userID);
+            $res = $this -> registerLogs($ip,"Delete", $id, $userID);
 
             return response() -> json(['data' => "Successfully deleted."],200);
         }catch(\Throwable $th){

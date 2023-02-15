@@ -25,6 +25,8 @@ class ItemController extends Controller
     public function store(Request $request)
     {
         try{
+            $ip = $request -> ip();
+
             $userID = 1;
 
             // Register product under a specific Purchase Request
@@ -39,7 +41,7 @@ class ItemController extends Controller
             $item -> updated_at = now();
             $item -> save();
             
-            $res = $this -> registerLogs("Post", $item -> PK_item_ID, $userID);
+            $res = $this -> registerLogs($ip,"Post", $item -> PK_item_ID, $userID);
 
             return response() -> json(['data' => "Items successfully added."],200);
         } catch(\Throwable $th){
@@ -64,6 +66,7 @@ class ItemController extends Controller
     public function update(Request $request)
     {
         try{
+            $ip = $request -> ip();
 
             $userID = 1;
             DB::table('items')
@@ -71,7 +74,7 @@ class ItemController extends Controller
             ->update(['procurement_remarks' => $request -> remarks, 'updated_at' => now()]);
 
 
-            $res = $this -> registerLogs("Update", $request -> PK_item_ID, $userID);
+            $res = $this -> registerLogs($ip,"Update", $request -> PK_item_ID, $userID);
 
             return response() -> json(['data' => "Successfully updated."],200);
         }catch(\Throwable $th){
@@ -79,14 +82,16 @@ class ItemController extends Controller
         }
     }
 
-    public function destroy($id)
+    public function destroy(Request $request,$id)
     {
         try{
+            $ip = $request -> ip();
+
             $userID = 1;
             $item = Items::findOrFail($id);
             $item -> delete();
 
-            $res = $this -> registerLogs("Post", $id, $userID);
+            $res = $this -> registerLogs($ip,"Post", $id, $userID);
 
             return response() -> json(['data' => "Successfully deleted."],200);
         }catch(\Throwable $th){
@@ -94,11 +99,12 @@ class ItemController extends Controller
         }
     }
     
-    public function registerLogs($task, $id, $userID)
+    public function registerLogs($ip, $task, $id, $userID)
     {
         try{
             $data = new Logs();
             $data -> task = $task;
+            $data -> ip_address = $ip;
             $data -> table_name = "Items";
             $data -> PK_ID = $id;
             $data -> FK_user_ID = $userID;

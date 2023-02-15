@@ -27,7 +27,8 @@ class UserTableSeed extends Seeder
             'email' => 'mmsadmin@gmail.com',
             'profile' => 'http://localhost:3000/default_profile.png',
             'password' => Hash::make('mmsmonitoring@123'),
-            'status' => 1
+            'system' => 1,
+            'status' => 1,
         ]);
     }
 }

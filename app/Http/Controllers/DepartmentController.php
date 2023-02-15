@@ -82,6 +82,7 @@ class DepartmentController extends Controller
     {
         try{
             $userID = 1;
+            $ip = $request -> ip();
             $data = DB::SELECT('SELECT * FROM department WHERE PK_department_ID = ?',[$request -> PK_department_ID]);
 
             $data -> dept_name = $request -> dept_name;
@@ -89,7 +90,7 @@ class DepartmentController extends Controller
             $data -> updated_at = now();
             $data -> save();
 
-            $res = $this -> registerLogs('Update',$request -> PK_department_ID, $userID);
+            $res = $this -> registerLogs($ip,'Update',$request -> PK_department_ID, $userID);
 
             return response() -> json(['data' => $data],200);
         } catch(\Throwable $th){
@@ -97,15 +98,16 @@ class DepartmentController extends Controller
         }
     }
 
-    public function destroy($id)
+    public function destroy(Request $request,$id)
     {
         try{
             $userID = 1;
+            $ip = $request -> ip();
 
             $data = Department::findOrFail($id);
             $data -> delete();
 
-            $res = $this -> registerLogs('Delete', $id, $userID);
+            $res = $this -> registerLogs($ip,'Delete', $id, $userID);
 
             return response() -> json(['message' => "Department is successfully deleted"],200);
         }catch(\Throwable $th){
@@ -114,11 +116,12 @@ class DepartmentController extends Controller
     }
 
 
-    public function registerLogs($task, $id, $userID)
+    public function registerLogs($ip, $task, $id, $userID)
     {
         try{
             $data = new Logs();
             $data -> task = $task;
+            $data -> ip_address = $ip;
             $data -> table_name = "Department";
             $data -> PK_ID = $id;
             $data -> FK_user_ID = $userID;
