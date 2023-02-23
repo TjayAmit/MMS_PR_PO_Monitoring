@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('first_name');
             $table->string('middle_name');
             $table->string('last_name');
+            $table->string('address');
             //Foreign key role, user must have one role will be use in UI display
             $table->integer('FK_role_ID')->unsigned();
             $table->foreign('FK_role_ID')->references('PK_role_ID')->on('role')->onUpdate('cascade');

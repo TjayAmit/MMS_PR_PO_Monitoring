@@ -26,6 +26,7 @@ class ProfileTableSeed extends Seeder
             'first_name' => "Tristan jay",
             'middle_name' => "Loquillano",
             'last_name' => "Amit",
+            'address' => 'Queson City',
             'FK_role_ID' => 1,
             'FK_user_ID' => 1,
             'FK_department_ID' => 1

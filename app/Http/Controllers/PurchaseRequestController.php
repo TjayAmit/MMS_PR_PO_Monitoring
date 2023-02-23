@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\PurchaseRequest;
 use App\Models\Procurement;
 use App\Models\Items;
+use App\Models\InsertThread;
 
 class PurchaseRequestController extends Controller
 {

@@ -30,7 +30,7 @@ Route::namespace('App\Http\Controllers') -> group(function(){
     Route::get('department/public', "DepartmentController@publicSelection");
 });
 
-// Route::group(['middleware' => 'auth:sanctum'], function(){
+Route::group(['middleware' => 'auth:sanctum'], function(){
     Route::namespace('App\Http\Controllers')->group(function(){
         
         // Department Module
@@ -68,6 +68,7 @@ Route::namespace('App\Http\Controllers') -> group(function(){
         Route::put('user', "UserController@update");
         Route::put('user/reset', "UserController@changePassword");
         Route::put('user/Account', "UserController@updateAccount");
+        Route::delete('user/logout', "UserController@logout");
         Route::delete('user/{id}', "UserController@destroy");
 
         //Item 
@@ -83,5 +84,5 @@ Route::namespace('App\Http\Controllers') -> group(function(){
         Route::get('logs/{id}',"LogsController@show");
         Route::put('logs',"LogsController@update");
         Route::delete('logs',"LogsController@destroy");
-    // });
+    });
 });

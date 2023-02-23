@@ -16,7 +16,8 @@ class Profile extends Model
     protected $fillable = [
         'first_name',
         'middle_name',
-        'last_name'
+        'last_name',
+        'address'
     ];
 
     protected $timestamp = TRUE;
