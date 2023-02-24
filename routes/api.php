@@ -65,7 +65,7 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
         //User
         Route::get('user',"UserController@index");
         Route::get('user/{id}', "UserController@show");
-        Route::put('user', "UserController@update");
+        Route::put('user/{id}', "UserController@update");
         Route::put('user/reset', "UserController@changePassword");
         Route::put('user/Account', "UserController@updateAccount");
         Route::delete('user/logout', "UserController@logout");

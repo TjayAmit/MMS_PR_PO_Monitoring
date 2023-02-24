@@ -248,7 +248,7 @@ class UserController extends Controller
 
             $res = $this -> registerLogs($ip,"Account Status Update", $request -> id, $userID);
 
-            return response() -> json(["data" => $data],200);
+            return response() -> json(["message" => 'success'],200);
 
         } catch(\Throwable $th){
             return response() -> json(["message" => $th -> getMessage()],500);
